@@ -1,17 +1,27 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, Text, Button} from 'react-native';
 import {connect} from 'react-redux';
-import {increment, decrement} from './state/modules/pokemon/actions';
-import {setUsername} from './state/modules/games/actions';
+import {bindActionCreators} from 'redux';
+import {pokemonSelectors, pokemonOperations} from './state/modules/pokemon';
+import {gameSelectors, gameOperations} from './state/modules/games';
 
-const PokedexApp = ({count, decrement, increment, username}: Props) => {
+const PokedexApp = ({
+  count,
+  decrement,
+  increment,
+  username,
+  setUsername,
+}: Props) => {
   return (
     <SafeAreaView>
-      <Text>{count} {username}</Text>
+      <Text>
+        {count} {username}
+      </Text>
       <Button
         title="+"
         onPress={() => {
           increment();
+          setUsername('alala');
         }}
       />
       <Button
@@ -28,6 +38,8 @@ interface Props {
   count: number;
   increment: () => void;
   decrement: () => void;
+  username: string;
+  setUsername: (name: string) => void;
 }
 
 const styles = StyleSheet.create({
@@ -50,14 +62,18 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  count: state.pokemonReducer.count,
-  username: state.gameReducer.username,
+  count: pokemonSelectors.selectCount(state),
+  username: gameSelectors.selectUserName(state),
 });
 
-const mapDispatchToProps = {
-  increment,
-  decrement,
-  setUsername,
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      ...pokemonOperations,
+      ...gameOperations,
+    },
+    dispatch,
+  );
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PokedexApp);

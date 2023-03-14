@@ -1,6 +1,6 @@
 import {INCREMENT, DECREMENT} from './types';
 
-interface State {
+export interface State {
   count: number;
 }
 
@@ -8,7 +8,7 @@ const initialState: State = {
   count: 0,
 };
 
-export const pokemonReducer = (state = initialState, action) => {
+export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case INCREMENT:
       return {...state, count: state.count + 1};
@@ -18,3 +18,5 @@ export const pokemonReducer = (state = initialState, action) => {
       return state;
   }
 };
+
+export default reducer;

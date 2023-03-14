@@ -1,6 +1,6 @@
 import {SET_USERNAME} from './types';
 
-interface State {
+export interface State {
   username: string;
 }
 
@@ -8,7 +8,7 @@ const initialState: State = {
   username: 'asdasdadsß',
 };
 
-export const gameReducer = (state = initialState, action) => {
+export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_USERNAME:
       return {...state, username: action.payload};
@@ -16,3 +16,5 @@ export const gameReducer = (state = initialState, action) => {
       return state;
   }
 };
+
+export default reducer;
