@@ -1,8 +1,13 @@
-import {createStore, combineReducers} from 'redux';
+import {combineReducers} from 'redux';
 import pokemonReducer from './modules/pokemon';
+import {configureStore, getDefaultMiddleware} from '@reduxjs/toolkit';
 import gameReducer from './modules/games';
 import {State as PokemonState} from './modules/pokemon/reducer';
 import {State as GameState} from './modules/games/reducer';
+import createSagaMiddleware from 'redux-saga';
+import rootSaga from './rootSaga';
+
+const sagaMiddleware = createSagaMiddleware();
 
 export interface State {
   pokemonReducer: PokemonState;
@@ -14,6 +19,11 @@ const rootReducer = combineReducers({
   gameReducer,
 });
 
-const store = createStore(rootReducer);
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: [...getDefaultMiddleware(), sagaMiddleware],
+});
+
+sagaMiddleware.run(rootSaga);
 
 export default store;

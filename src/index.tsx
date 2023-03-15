@@ -21,7 +21,6 @@ const PokedexApp = ({
         title="+"
         onPress={() => {
           increment();
-          setUsername('alala');
         }}
       />
       <Button
