@@ -1,44 +1,74 @@
-import React from 'react';
-import {SafeAreaView, StyleSheet, Text, Button} from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useEffect} from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  FlatList,
+} from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {pokemonSelectors, pokemonOperations} from './state/modules/pokemon';
 import {gameSelectors, gameOperations} from './state/modules/games';
+import {Pokemon, PokemonListItemOverview} from './models/pokemonModel';
+import {State} from './state';
+
+interface FlatListItem<T> {
+  item: T;
+  index: number;
+  separators: {
+    highlight: () => void;
+    unhighlight: () => void;
+    updateProps: (select: 'leading' | 'trailing', newProps: any) => void;
+  };
+}
 
 const PokedexApp = ({
-  count,
-  decrement,
-  increment,
-  username,
-  setUsername,
+  fetchPokemonList,
+  pokemonList,
+  isPokemonListLoading,
 }: Props) => {
+  useEffect(() => {
+    fetchPokemonList();
+  }, [fetchPokemonList]);
   return (
     <SafeAreaView>
-      <Text>
-        {count} {username}
-      </Text>
-      <Button
-        title="+"
-        onPress={() => {
-          increment();
-        }}
-      />
-      <Button
-        title="-"
-        onPress={() => {
-          decrement();
-        }}
-      />
+      {!isPokemonListLoading && (
+        <FlatList
+          data={pokemonList}
+          renderItem={({item}: FlatListItem<PokemonListItemOverview>) => {
+            return (
+              <View>
+                <Text>{item.name}</Text>
+                {item.id && (
+                  <Image
+                    source={{
+                      uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${item.id}.png`,
+                    }}
+                    style={{width: 200, height: 200}}
+                  />
+                )}
+              </View>
+            );
+          }}
+          keyExtractor={(item: PokemonListItemOverview) => item.id}
+        />
+      )}
+      {isPokemonListLoading && <Text>... cargando</Text>}
     </SafeAreaView>
   );
 };
 
 interface Props {
-  count: number;
-  increment: () => void;
-  decrement: () => void;
+  pokemonList: PokemonListItemOverview[] | null;
+  isPokemonListLoading: boolean;
+  pokemonListError: boolean;
   username: string;
+  pokemonListCounter: number;
   setUsername: (name: string) => void;
+  fetchPokemonList: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -59,9 +89,11 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
-
-const mapStateToProps = state => ({
-  count: pokemonSelectors.selectCount(state),
+const mapStateToProps = (state: State) => ({
+  pokemonList: pokemonSelectors.selectPokemonList(state),
+  isPokemonListLoading: pokemonSelectors.selectIsPokemonListLoading(state),
+  pokemonListError: pokemonSelectors.selectPokemonListError(state),
+  pokemonListCounter: pokemonSelectors.selectPokemonListCount(state),
   username: gameSelectors.selectUserName(state),
 });
 

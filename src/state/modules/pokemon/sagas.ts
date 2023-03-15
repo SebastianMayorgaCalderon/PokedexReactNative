@@ -1,24 +1,28 @@
-import {put, takeEvery, select} from 'redux-saga/effects';
-import {INCREMENT, DECREMENT} from './types';
-import {selectCount} from './selectors';
-import {gameTypes} from '../games';
+import {put, takeLatest, call} from 'redux-saga/effects';
+import {FETCH_POKEMON_LIST, FETCH_POKEMON_LIST_SUCCESS} from './types';
 
-function* handleIncrement() {
-  yield console.log('Incrementing...');
-  const count: number = yield select(selectCount);
-  yield put({type: gameTypes.SET_USERNAME, payload: `su maigre${count}`});
+import {fetchPokemonList} from './api';
+import {PokemonListItemOverview, PokemonListItem} from 'models/pokemonModel';
+import {extractPokemonIdFromUrl} from '../../../utils/sagasUtils';
+
+function* handleFetchPokemonList() {
+  const pokemonListResponse: PokemonListItem[] = yield call(fetchPokemonList);
+  console.log(pokemonListResponse);
+  const pokemonOverviewList: PokemonListItemOverview[] =
+    pokemonListResponse.map(
+      (pokemonListItem: PokemonListItem): PokemonListItemOverview => ({
+        ...pokemonListItem,
+        id: extractPokemonIdFromUrl(pokemonListItem.url),
+      }),
+    );
+  // const pokemonList: Pokemon[] = yield Promise.all(
+  //   response.map(({url}: PokemonRef) => fetchPokemonDetails(url)),
+  // );
+  yield put({type: FETCH_POKEMON_LIST_SUCCESS, payload: pokemonOverviewList});
 }
 
-function* handleDecrement() {
-  yield console.log('Decrementing...');
+export function* watchFetchPokemonList() {
+  yield takeLatest(FETCH_POKEMON_LIST, handleFetchPokemonList);
 }
 
-export function* watchCountIncrement() {
-  yield takeEvery(INCREMENT, handleIncrement);
-}
-
-export function* watchCountDecrement() {
-  yield takeEvery(DECREMENT, handleDecrement);
-}
-
-export const sagas = [watchCountIncrement, watchCountDecrement];
+export const sagas = [watchFetchPokemonList];
