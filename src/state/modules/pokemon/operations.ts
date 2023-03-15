@@ -1,6 +1,5 @@
-import {decrement, increment} from './actions';
+import {fetchPokemonList} from './actions';
 
 export default {
-  decrement,
-  increment,
-}
+  fetchPokemonList,
+};
