@@ -12,8 +12,9 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {pokemonSelectors, pokemonOperations} from './state/modules/pokemon';
 import {gameSelectors, gameOperations} from './state/modules/games';
-import {Pokemon, PokemonListItemOverview} from './models/pokemonModel';
+import {PokemonListItemOverview} from './models/pokemonModel';
 import {State} from './state';
+import PokemonGrid from 'src/components/PokemonGrid';
 
 interface FlatListItem<T> {
   item: T;
@@ -29,13 +30,14 @@ const PokedexApp = ({
   fetchPokemonList,
   pokemonList,
   isPokemonListLoading,
+  pokemonListError,
 }: Props) => {
   useEffect(() => {
     fetchPokemonList();
   }, [fetchPokemonList]);
   return (
     <SafeAreaView>
-      {!isPokemonListLoading && (
+      {!isPokemonListLoading && !pokemonListError && (
         <FlatList
           data={pokemonList}
           renderItem={({item}: FlatListItem<PokemonListItemOverview>) => {
@@ -55,6 +57,9 @@ const PokedexApp = ({
           }}
           keyExtractor={(item: PokemonListItemOverview) => item.id}
         />
+      )}
+      {!isPokemonListLoading && pokemonListError && (
+        <Text>Error Brochacho</Text>
       )}
       {isPokemonListLoading && <Text>... cargando</Text>}
     </SafeAreaView>

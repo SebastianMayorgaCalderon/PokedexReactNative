@@ -35,4 +35,5 @@ export interface PokemonListItem {
 
 export interface PokemonListItemOverview extends PokemonListItem {
   id: string;
+  imageUrl: string;
 }

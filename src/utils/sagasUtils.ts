@@ -1,5 +1,2 @@
-const extractPokemonIdFromUrl = (url: string): string => {
-  return url.split('/')[6];
-};
-
-export {extractPokemonIdFromUrl};
+import * as PokemonSagasUtils from 'src/utils/PokemonSagasUtils';
+export default {...PokemonSagasUtils};

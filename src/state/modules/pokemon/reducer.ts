@@ -1,4 +1,4 @@
-import {Pokemon, PokemonListItemOverview} from 'models/pokemonModel';
+import {PokemonListItemOverview} from 'src/models/pokemonModel';
 import {
   FETCH_POKEMON_LIST,
   FETCH_POKEMON_LIST_ERROR,
