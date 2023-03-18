@@ -1,5 +1,3 @@
-const LIMIT: number = 115;
+const LIMIT: number = 45;
 
-export default {
-  LIMIT,
-};
+export {LIMIT};

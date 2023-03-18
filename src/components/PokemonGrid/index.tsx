@@ -1,35 +1,26 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Text, FlatList} from 'react-native';
+import {FlatList} from 'react-native';
 import {PokemonListItemOverview} from 'src/models/pokemonModel';
-import {FlatListItem} from 'src/utils/FlatListUtils';
+import PokemonGridItem from 'src/components/PokemonGrid/PokemonGridItem';
 
 interface PokemonGridProps {
   pokemonOverViewList: PokemonListItemOverview[];
   loadingList: boolean;
   error: boolean;
+  loadMore: () => void;
 }
 
 const PokemonGrid = (props: PokemonGridProps) => {
-  const {pokemonOverViewList} = props;
+  const {pokemonOverViewList, loadMore} = props;
   return (
     <FlatList
       data={pokemonOverViewList}
-      renderItem={({item}: FlatListItem<PokemonListItemOverview>) => {
-        return (
-          <View>
-            <Text>{item.name}</Text>
-            {item.id && (
-              <Image
-                source={{
-                  uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${item.id}.png`,
-                }}
-                style={{width: 200, height: 200}}
-              />
-            )}
-          </View>
-        );
-      }}
+      renderItem={PokemonGridItem}
       keyExtractor={(item: PokemonListItemOverview) => item.id}
+      onEndReached={() => {
+        loadMore();
+      }}
     />
   );
 };

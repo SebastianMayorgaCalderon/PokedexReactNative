@@ -4,11 +4,15 @@ import pokemonApiClient from 'src/axios/PokemonAxios';
 import {LIMIT} from 'src/constants/PokemonApiConstants';
 import {ApiResponse} from 'src/axios';
 
-export async function fetchPokemonList(): Promise<
-  ApiResponse<PokemonListItem[]>
-> {
+export async function fetchPokemonList(
+  offset: number,
+): Promise<ApiResponse<PokemonListItem[]>> {
   const apiResponse = await pokemonApiClient.get<PokemonListItem[]>(
     `/pokemon?limit=${LIMIT}`,
+    {
+      limit: LIMIT,
+      offset,
+    },
   );
   return apiResponse;
 }

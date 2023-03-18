@@ -29,6 +29,7 @@ class PokemonApiClient {
   }
 
   public async get<T>(url: string, params?: any): Promise<ApiResponse<T>> {
+    console.log(params);
     try {
       // Make the GET request using the Axios instance
       const response: AxiosResponse<T> = await this.instance.get<T>(url, {

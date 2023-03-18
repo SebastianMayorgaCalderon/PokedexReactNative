@@ -37,25 +37,12 @@ const PokedexApp = ({
   }, [fetchPokemonList]);
   return (
     <SafeAreaView>
-      {!isPokemonListLoading && !pokemonListError && (
-        <FlatList
-          data={pokemonList}
-          renderItem={({item}: FlatListItem<PokemonListItemOverview>) => {
-            return (
-              <View>
-                <Text>{item.name}</Text>
-                {item.id && (
-                  <Image
-                    source={{
-                      uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${item.id}.png`,
-                    }}
-                    style={{width: 200, height: 200}}
-                  />
-                )}
-              </View>
-            );
-          }}
-          keyExtractor={(item: PokemonListItemOverview) => item.id}
+      {!pokemonListError && (
+        <PokemonGrid
+          pokemonOverViewList={pokemonList ?? []}
+          loadingList={isPokemonListLoading}
+          error={pokemonListError}
+          loadMore={fetchPokemonList}
         />
       )}
       {!isPokemonListLoading && pokemonListError && (

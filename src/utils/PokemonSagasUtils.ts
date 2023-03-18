@@ -11,16 +11,13 @@ const extractPokemonIdFromUrl = (url: string): string => {
 const parsePokemonListResponseToPokemonOverViewList = (
   list: PokemonListItem[],
 ): PokemonListItemOverview[] => {
-  console.log(list);
-
   return list.map(
     (pokemonListItem: PokemonListItem): PokemonListItemOverview => {
+      const id = extractPokemonIdFromUrl(pokemonListItem.url);
       return {
         ...pokemonListItem,
-        id: extractPokemonIdFromUrl(pokemonListItem.url),
-        imageUrl: POKE_IMG_API_BASE_URL(
-          extractPokemonIdFromUrl(pokemonListItem.url),
-        ),
+        id,
+        imageUrl: POKE_IMG_API_BASE_URL(id),
       };
     },
   );
