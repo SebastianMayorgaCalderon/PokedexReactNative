@@ -43,6 +43,7 @@ const PokedexApp = ({
           loadingList={isPokemonListLoading}
           error={pokemonListError}
           loadMore={fetchPokemonList}
+          spacingBetweenItems={4}
         />
       )}
       {!isPokemonListLoading && pokemonListError && (

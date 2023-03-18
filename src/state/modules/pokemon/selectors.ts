@@ -12,7 +12,8 @@ export const selectPokemonOffset: Selector<State, number> = createSelector(
 export const selectPokemonList: Selector<State, PokemonListItemOverview[]> =
   createSelector(
     [selectPokemonReducer],
-    pokemonReducer => pokemonReducer.pokemonList ?? [],
+    pokemonReducer =>
+      pokemonReducer.pokemonList?.filter(pokemon => pokemon.imageUrl) ?? [],
   );
 
 export const selectIsPokemonListLoading: Selector<State, boolean> =
