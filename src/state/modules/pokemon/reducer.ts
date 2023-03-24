@@ -1,4 +1,4 @@
-import {PokemonListItemOverview} from 'src/models/pokemonModel';
+import {Pokemon, PokemonListItemOverview} from 'src/models/pokemonModel';
 import {
   FETCH_POKEMON_LIST,
   FETCH_POKEMON_LIST_ERROR,
@@ -9,6 +9,7 @@ import {LIMIT} from 'src/constants/PokemonApiConstants';
 
 export interface State {
   pokemonList?: PokemonListItemOverview[];
+  pokemonDetailList?: Pokemon[];
   isPokemonListLoading: boolean;
   pokemonListError: boolean;
   offset: number;
@@ -17,6 +18,7 @@ export interface State {
 
 const initialState: State = {
   pokemonList: [],
+  pokemonDetailList: [],
   isPokemonListLoading: false,
   pokemonListError: false,
   offset: 0,
