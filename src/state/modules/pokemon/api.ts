@@ -1,17 +1,25 @@
-import {Pokemon, PokemonListItem} from 'models/pokemonModel';
+import {Pokemon, PokemonListItem} from 'src/models/pokemonModel';
 import axios from 'axios';
+import pokemonApiClient from 'src/axios/PokemonAxios';
+import {LIMIT} from 'src/constants/PokemonApiConstants';
+import {ApiResponse} from 'src/axios';
 
-export async function fetchPokemonList(): Promise<PokemonListItem[]> {
-  const response = await axios.get(
-    'https://pokeapi.co/api/v2/pokemon?limit=151',
+export async function fetchPokemonList(
+  offset: number,
+): Promise<ApiResponse<PokemonListItem[]>> {
+  const apiResponse = await pokemonApiClient.get<PokemonListItem[]>(
+    `/pokemon?limit=${LIMIT}`,
+    {
+      limit: LIMIT,
+      offset,
+    },
   );
-  return response.data.results;
+  return apiResponse;
 }
 
 export async function fetchPokemonDetails(url: string): Promise<Pokemon> {
   const response = await axios.get(url);
   const data = response.data;
-  console.log(data.abilities)
   const pokemon: Pokemon = {
     id: data.id,
     name: data.name,

@@ -1,16 +1,20 @@
-import {Pokemon, PokemonListItemOverview} from 'models/pokemonModel';
+import {PokemonListItemOverview} from 'src/models/pokemonModel';
 import {createSelector, Selector} from 'reselect';
 import {State} from '../../index';
 
 const selectPokemonReducer = (state: State) => state.pokemonReducer;
 
-export const selectPokemonList: Selector<
-  State,
-  PokemonListItemOverview[] | null
-> = createSelector(
+export const selectPokemonOffset: Selector<State, number> = createSelector(
   [selectPokemonReducer],
-  pokemonReducer => pokemonReducer.pokemonList,
+  pokemonReducer => pokemonReducer.offset,
 );
+
+export const selectPokemonList: Selector<State, PokemonListItemOverview[]> =
+  createSelector(
+    [selectPokemonReducer],
+    pokemonReducer =>
+      pokemonReducer.pokemonList?.filter(pokemon => pokemon.imageUrl) ?? [],
+  );
 
 export const selectIsPokemonListLoading: Selector<State, boolean> =
   createSelector(
@@ -34,4 +38,5 @@ export default {
   selectIsPokemonListLoading,
   selectPokemonListError,
   selectPokemonListCount,
+  selectPokemonOffset,
 };

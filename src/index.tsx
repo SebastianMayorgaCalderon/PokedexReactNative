@@ -12,8 +12,9 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {pokemonSelectors, pokemonOperations} from './state/modules/pokemon';
 import {gameSelectors, gameOperations} from './state/modules/games';
-import {Pokemon, PokemonListItemOverview} from './models/pokemonModel';
+import {PokemonListItemOverview} from './models/pokemonModel';
 import {State} from './state';
+import PokemonGrid from 'src/components/PokemonGrid';
 
 interface FlatListItem<T> {
   item: T;
@@ -29,32 +30,24 @@ const PokedexApp = ({
   fetchPokemonList,
   pokemonList,
   isPokemonListLoading,
+  pokemonListError,
 }: Props) => {
   useEffect(() => {
     fetchPokemonList();
   }, [fetchPokemonList]);
   return (
     <SafeAreaView>
-      {!isPokemonListLoading && (
-        <FlatList
-          data={pokemonList}
-          renderItem={({item}: FlatListItem<PokemonListItemOverview>) => {
-            return (
-              <View>
-                <Text>{item.name}</Text>
-                {item.id && (
-                  <Image
-                    source={{
-                      uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${item.id}.png`,
-                    }}
-                    style={{width: 200, height: 200}}
-                  />
-                )}
-              </View>
-            );
-          }}
-          keyExtractor={(item: PokemonListItemOverview) => item.id}
+      {!pokemonListError && (
+        <PokemonGrid
+          pokemonOverViewList={pokemonList ?? []}
+          loadingList={isPokemonListLoading}
+          error={pokemonListError}
+          loadMore={fetchPokemonList}
+          spacingBetweenItems={4}
         />
+      )}
+      {!isPokemonListLoading && pokemonListError && (
+        <Text>Error Brochacho</Text>
       )}
       {isPokemonListLoading && <Text>... cargando</Text>}
     </SafeAreaView>

@@ -1,20 +1,28 @@
-import {Pokemon, PokemonListItemOverview} from 'models/pokemonModel';
+import {Pokemon, PokemonListItemOverview} from 'src/models/pokemonModel';
 import {
   FETCH_POKEMON_LIST,
   FETCH_POKEMON_LIST_ERROR,
   FETCH_POKEMON_LIST_SUCCESS,
 } from './types';
 
+import {LIMIT} from 'src/constants/PokemonApiConstants';
+
 export interface State {
-  pokemonList: PokemonListItemOverview[] | null;
+  pokemonList?: PokemonListItemOverview[];
+  pokemonDetailList?: Pokemon[];
   isPokemonListLoading: boolean;
   pokemonListError: boolean;
+  offset: number;
+  limit: number;
 }
 
 const initialState: State = {
-  pokemonList: null,
+  pokemonList: [],
+  pokemonDetailList: [],
   isPokemonListLoading: false,
   pokemonListError: false,
+  offset: 0,
+  limit: LIMIT,
 };
 
 export const reducer = (state = initialState, action) => {
@@ -25,7 +33,10 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         isPokemonListLoading: false,
-        pokemonList: action.payload,
+        pokemonList: [...(state.pokemonList ?? []), ...action.payload.results],
+        pokemonListError: false,
+        offset: state.limit,
+        limit: state.limit + state.limit
       };
     case FETCH_POKEMON_LIST_ERROR:
       return {...state, isPokemonListLoading: false, pokemonListError: true};

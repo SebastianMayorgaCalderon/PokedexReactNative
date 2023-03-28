@@ -1,24 +1,34 @@
-import {put, takeLatest, call} from 'redux-saga/effects';
-import {FETCH_POKEMON_LIST, FETCH_POKEMON_LIST_SUCCESS} from './types';
-
+import {put, takeLatest, call, select} from 'redux-saga/effects';
+import {
+  FETCH_POKEMON_LIST,
+  FETCH_POKEMON_LIST_ERROR,
+  FETCH_POKEMON_LIST_SUCCESS,
+} from './types';
 import {fetchPokemonList} from './api';
-import {PokemonListItemOverview, PokemonListItem} from 'models/pokemonModel';
-import {extractPokemonIdFromUrl} from '../../../utils/sagasUtils';
+import {PokemonListItemOverview} from 'src/models/pokemonModel';
+import {ApiResponse} from 'src/axios';
+import {parsePokemonListResponseToPokemonOverViewList} from 'src/utils/PokemonSagasUtils';
+import {PokemonApiResponse} from 'src/axios/PokemonAxios';
+import {selectPokemonOffset} from './selectors';
 
 function* handleFetchPokemonList() {
-  const pokemonListResponse: PokemonListItem[] = yield call(fetchPokemonList);
-  console.log(pokemonListResponse);
-  const pokemonOverviewList: PokemonListItemOverview[] =
-    pokemonListResponse.map(
-      (pokemonListItem: PokemonListItem): PokemonListItemOverview => ({
-        ...pokemonListItem,
-        id: extractPokemonIdFromUrl(pokemonListItem.url),
-      }),
-    );
-  // const pokemonList: Pokemon[] = yield Promise.all(
-  //   response.map(({url}: PokemonRef) => fetchPokemonDetails(url)),
-  // );
-  yield put({type: FETCH_POKEMON_LIST_SUCCESS, payload: pokemonOverviewList});
+  const offset: number = yield select(selectPokemonOffset);
+
+  const pokemonListResponse: ApiResponse<PokemonApiResponse> = yield call(() =>
+    fetchPokemonList(offset),
+  );
+  if (!pokemonListResponse.data) {
+    yield put({type: FETCH_POKEMON_LIST_ERROR, payload: 'error'});
+  } else {
+    const pokemonOverviewList: PokemonListItemOverview[] =
+      parsePokemonListResponseToPokemonOverViewList(
+        pokemonListResponse.data.results,
+      );
+    yield put({
+      type: FETCH_POKEMON_LIST_SUCCESS,
+      payload: {...pokemonListResponse.data, results: pokemonOverviewList},
+    });
+  }
 }
 
 export function* watchFetchPokemonList() {
