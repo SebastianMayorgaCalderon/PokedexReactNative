@@ -15,11 +15,6 @@ interface PokemonGridProps {
 
 const PokemonGrid = (props: PokemonGridProps) => {
   const {pokemonOverViewList, loadMore, spacingBetweenItems} = props;
-
-
-
-  
-
   const numColumns = useMemo(() => {
     const screenWidth = Dimensions.get('window').width;
     const itemWidth = 128; // Change this to adjust the size of the grid items
