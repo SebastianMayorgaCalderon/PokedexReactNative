@@ -33,8 +33,10 @@ const PokedexApp = ({
   pokemonListError,
 }: Props) => {
   useEffect(() => {
-    fetchPokemonList();
-  }, [fetchPokemonList]);
+    if (pokemonList?.length === 0) {
+      fetchPokemonList();
+    }
+  },[]);
   return (
     <SafeAreaView>
       {!pokemonListError && (
