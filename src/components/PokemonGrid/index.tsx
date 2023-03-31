@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useMemo} from 'react';
-import {FlatList, Dimensions, StyleSheet} from 'react-native';
+import {FlatList, Dimensions, StyleSheet, Pressable} from 'react-native';
 import {PokemonListItemOverview} from 'src/models/pokemonModel';
 import PokemonGridItem from 'src/components/PokemonGrid/PokemonGridItem';
 import {FlatListItem} from 'src/utils/FlatListUtils';
@@ -10,11 +10,12 @@ interface PokemonGridProps {
   loadingList: boolean;
   error: boolean;
   loadMore: () => void;
+  onPress: (id: string) => void;
   spacingBetweenItems: number;
 }
 
 const PokemonGrid = (props: PokemonGridProps) => {
-  const {pokemonOverViewList, loadMore, spacingBetweenItems} = props;
+  const {pokemonOverViewList, loadMore, spacingBetweenItems, onPress} = props;
 
   const numColumns = useMemo(() => {
     const screenWidth = Dimensions.get('window').width;
@@ -64,6 +65,7 @@ const PokemonGrid = (props: PokemonGridProps) => {
         id={id}
         url={url}
         style={spacingStyle}
+        onPress={onPress}
       />
     );
   };

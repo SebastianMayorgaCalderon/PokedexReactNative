@@ -8,77 +8,29 @@
 
 import {NavigationContainer} from '@react-navigation/native';
 
-import React from 'react';
-import type {Node} from 'react';
-import {SafeAreaView, View, Text, Button} from 'react-native';
-import PokedexApp from './src';
+import React, { FC } from 'react';
 import {Provider} from 'react-redux';
 import store from './src/state';
 
-import {RouteProp} from '@react-navigation/native';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {PokemonListScreen, HelloWorldScreen} from 'src/screens'
 
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-type StackParamList = {
-  PokemonListScreen: {prop1: string};
-  HelloWorldScreen: {prop2: number};
-};
+import {pokemonScreenRouters, pokemonScreenNames}from 'src/routes/PokemonRouting'
 
-type PokemonScreenProps = {
-  route: RouteProp<StackParamList, 'PokemonListScreen'>;
-};
 
-type HelloworldScreenProps = {
-  route: RouteProp<StackParamList, 'HelloWorldScreen'>;
-  navigation: NativeStackNavigationProp<StackParamList, 'HelloWorldScreen'>;
-};
-
-const Stack = createNativeStackNavigator<StackParamList>();
-
-const PokemonListScreen: (props: PokemonScreenProps) => Node = ({
-  route,
-}: PokemonScreenProps) => {
-  return (
-    <SafeAreaView>
-      <PokedexApp />
-    </SafeAreaView>
-  );
-};
-
-const HelloWorldScreen: (props: HelloWorldScreenProps) => Node = ({
-  route,
-  navigation,
-}: PokemonScreenProps) => {
-  const handlePress = () => {
-    navigation.navigate('PokemonListScreen');
-  };
-
-  return (
-    <SafeAreaView>
-      <View>
-        <Text>Hello world</Text>
-        <Button title="Go to pokemon list" onPress={handlePress} />
-      </View>
-    </SafeAreaView>
-  );
-};
-
-const App: () => Node = () => {
+const App: FC = () => {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        {/* <SafeAreaView>
-          <PokedexApp />
-        </SafeAreaView> */}
-        <Stack.Navigator>
-          <Stack.Screen name="HelloWorldScreen" component={HelloWorldScreen} />
-          <Stack.Screen
-            name="PokemonListScreen"
+        <pokemonScreenRouters.PokemonListStack.Navigator initialRouteName={'POKEMON_LIST_SCREEN'}>
+          <pokemonScreenRouters.PokemonListStack.Screen name='HELLO_WORLD_SCREEN' component={HelloWorldScreen} initialParams={{prop1: 'lalala`'}} />
+          <pokemonScreenRouters.PokemonListStack.Screen
+            name="POKEMON_LIST_SCREEN"
             component={PokemonListScreen}
           />
-        </Stack.Navigator>
+        </pokemonScreenRouters.PokemonListStack.Navigator>
       </NavigationContainer>
     </Provider>
   );

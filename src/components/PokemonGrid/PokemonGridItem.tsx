@@ -1,16 +1,17 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
+import {View, Text, Image, StyleSheet, Pressable, GestureResponderEvent} from 'react-native';
 import {PokemonListItemOverview} from 'src/models/pokemonModel';
 
 interface PokemonGridItemProps extends PokemonListItemOverview {
   style: any;
+  onPress: (id: string) => void
 }
 
 const PokemonGridItem = (props: PokemonGridItemProps) => {
-  const {name, id, imageUrl, style} = props;
+  const {name, id, imageUrl, style, onPress} = props;
 
   return (
-    <View style={[styles.gridItem, style]}>
+    <Pressable style={[styles.gridItem, style]} onPress={()=>onPress(id)}>
       {id && (
         <Image
           source={{
@@ -20,7 +21,7 @@ const PokemonGridItem = (props: PokemonGridItemProps) => {
         />
       )}
       <Text>{name}</Text>
-    </View>
+    </Pressable>
   );
 };
 
