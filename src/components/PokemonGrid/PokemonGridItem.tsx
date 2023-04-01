@@ -11,7 +11,9 @@ const PokemonGridItem = (props: PokemonGridItemProps) => {
   const {name, id, imageUrl, style, onPress} = props;
 
   return (
-    <Pressable style={[styles.gridItem, style]} onPress={()=>onPress(id)}>
+    <Pressable style={[styles.gridItem, style]} onPress={()=>{
+      console.log('pressed')
+      onPress(id)}}>
       {id && (
         <Image
           source={{

@@ -10,15 +10,13 @@ import {
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
-import {PokemonScreenProps} from 'src/routes/PokemonRouting/ScreenProps';
+import {PokemonScreenProps} from 'src/routes/PokemonRouting/RouteProps';
 
 import {pokemonSelectors, pokemonOperations} from 'src/state/modules/pokemon';
 import {gameSelectors, gameOperations} from 'src/state/modules/games';
-import {PokemonListItemOverview} from 'src/models/pokemonModel';
+import {Pokemon} from 'src/models/pokemonModel';
 import {State} from 'src/state';
 import PokemonGrid from 'src/components/PokemonGrid';
-
-import {POKEMON_LIST_SCREEN_NAME} from 'src/routes/PokemonRouting/ScreenNames';
 
 interface FlatListItem<T> {
   item: T;
@@ -31,10 +29,10 @@ interface FlatListItem<T> {
 }
 
 interface PokemonListScreenProps extends PokemonScreenProps{
-  pokemonList: PokemonListItemOverview[];
+  pokemonList: Pokemon[];
   isPokemonListLoading: boolean;
   pokemonListError: boolean;
-  pokemonListCounter: number;
+  pokemonListCounter: number | null;
   username: string;
   fetchPokemonList: () => void;
   setUsername: (name: string) => void;
@@ -43,10 +41,13 @@ interface PokemonListScreenProps extends PokemonScreenProps{
 const PokemonListScreen = ({route, navigation, fetchPokemonList,
   pokemonList,
   isPokemonListLoading,
-  pokemonListError, }: PokemonListScreenProps) => {
-  //
+  pokemonListError, 
+}: PokemonListScreenProps) => {  
   const handleNavigate = (id: string) => {
-    navigation.navigate('HELLO_WORLD_SCREEN', {prop1: id});
+    const selectedPokemon = pokemonList.find((pokemon:Pokemon)=>pokemon.id === id);
+    console.log(selectedPokemon);
+    if(selectedPokemon)
+      navigation.navigate('POKEMON_DETAILS_SCREEN', {selectedPokemon});
   };
 
   useEffect(() => {
@@ -58,7 +59,7 @@ const PokemonListScreen = ({route, navigation, fetchPokemonList,
     <SafeAreaView>
        {!pokemonListError && (
         <PokemonGrid
-          pokemonOverViewList={pokemonList ?? []}
+          pokemonList={pokemonList ?? []}
           loadingList={isPokemonListLoading}
           error={pokemonListError}
           loadMore={fetchPokemonList}

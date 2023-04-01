@@ -1,6 +1,4 @@
-import * as pokemonScreenNames from './ScreenNames';
-import * as pokemonScreenTypes from './ScreenProps';
-import * as pokemonScreenRouters from './ScreenRouters';
-import * as pokemonScreenProps from './ScreenProps';
+import * as pokemonScreenTypes from './RouteProps';
+import * as pokemonScreenRouters from './Routers';
 
-export { pokemonScreenNames, pokemonScreenTypes, pokemonScreenRouters, pokemonScreenProps};
+export {pokemonScreenTypes, pokemonScreenRouters};

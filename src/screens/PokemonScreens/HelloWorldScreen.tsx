@@ -1,7 +1,14 @@
 import React, {FC} from 'react'
 import {View, Text, Button} from 'react-native'
-import {HelloWorldScreenProps} from 'src/routes/PokemonRouting/ScreenProps'
-import {HELLO_WORLD_SCREEN_NAME} from 'src/routes/PokemonRouting/ScreenNames';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+
+import {HelloWorldScreenProps} from 'src/routes/PokemonRouting/RouteProps'
+
+
+import {pokemonSelectors, pokemonOperations} from 'src/state/modules/pokemon';
+import {gameSelectors, gameOperations} from 'src/state/modules/games';
+
 const HelloWorldScreen = ({
     route,
     navigation,
@@ -17,4 +24,18 @@ const HelloWorldScreen = ({
         </View>
     );
   };
+
+const mapStateToProps = (state: State) => ({
+});
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      ...pokemonOperations,
+      ...gameOperations,
+    },
+    dispatch,
+  );
+};
+
 export default HelloWorldScreen;

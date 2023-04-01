@@ -1,6 +1,6 @@
 import {POKE_IMG_API_BASE_URL} from 'src/constants/API';
 import {
-  PokemonListItem,
+  Pokemon,
   PokemonListItemOverview,
 } from 'src/models/pokemonModel';
 
@@ -9,10 +9,10 @@ const extractPokemonIdFromUrl = (url: string): string => {
 };
 
 const parsePokemonListResponseToPokemonOverViewList = (
-  list: PokemonListItem[],
-): PokemonListItemOverview[] => {
+  list: PokemonListItemOverview[],
+): Pokemon[] => {
   return list.map(
-    (pokemonListItem: PokemonListItem): PokemonListItemOverview => {
+    (pokemonListItem: PokemonListItemOverview): Pokemon => {
       const id = extractPokemonIdFromUrl(pokemonListItem.url);
       return {
         ...pokemonListItem,

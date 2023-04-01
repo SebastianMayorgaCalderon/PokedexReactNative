@@ -1,6 +1,6 @@
-import {PokemonListScreen, HelloWorldScreen} from './PokemonScreens';
+import {PokemonListScreen, HelloWorldScreen, PokemonDetailsScreen} from './PokemonScreens';
 
 export {
-    PokemonListScreen, HelloWorldScreen,
+    PokemonListScreen, HelloWorldScreen, PokemonDetailsScreen
 }
 

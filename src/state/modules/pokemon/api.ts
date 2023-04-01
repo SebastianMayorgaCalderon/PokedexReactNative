@@ -1,13 +1,13 @@
-import {Pokemon, PokemonListItem} from 'src/models/pokemonModel';
+import {Pokemon, PokemonListItemOverview} from 'src/models/pokemonModel';
 import axios from 'axios';
 import pokemonApiClient from 'src/axios/PokemonAxios';
 import {LIMIT} from 'src/constants/PokemonApiConstants';
 import {ApiResponse} from 'src/axios';
-
+``
 export async function fetchPokemonList(
   offset: number,
-): Promise<ApiResponse<PokemonListItem[]>> {
-  const apiResponse = await pokemonApiClient.get<PokemonListItem[]>(
+): Promise<ApiResponse<PokemonListItemOverview[]>> {
+  const apiResponse = await pokemonApiClient.get<PokemonListItemOverview[]>(
     `/pokemon?limit=${LIMIT}`,
     {
       limit: LIMIT,

@@ -3,9 +3,10 @@ import {
   FETCH_POKEMON_LIST,
   FETCH_POKEMON_LIST_ERROR,
   FETCH_POKEMON_LIST_SUCCESS,
+  FETCH_POKEMON_DETAILS
 } from './types';
 import {fetchPokemonList} from './api';
-import {PokemonListItemOverview} from 'src/models/pokemonModel';
+import {Pokemon, PokemonListItemOverview} from 'src/models/pokemonModel';
 import {ApiResponse} from 'src/axios';
 import {parsePokemonListResponseToPokemonOverViewList} from 'src/utils/PokemonSagasUtils';
 import {PokemonApiResponse} from 'src/axios/PokemonAxios';
@@ -20,7 +21,7 @@ function* handleFetchPokemonList() {
   if (!pokemonListResponse.data) {
     yield put({type: FETCH_POKEMON_LIST_ERROR, payload: 'error'});
   } else {
-    const pokemonOverviewList: PokemonListItemOverview[] =
+    const pokemonOverviewList: Pokemon[] =
       parsePokemonListResponseToPokemonOverViewList(
         pokemonListResponse.data.results,
       );
@@ -31,8 +32,16 @@ function* handleFetchPokemonList() {
   }
 }
 
+function * handleFetchPokemonDetails(action: {type: string, payload: string}) {
+  console.log(action.payload);
+}
+
 export function* watchFetchPokemonList() {
   yield takeLatest(FETCH_POKEMON_LIST, handleFetchPokemonList);
+}
+
+export function* watchFetchPokemonDetails(){
+  yield takeLatest(FETCH_POKEMON_DETAILS, handleFetchPokemonDetails);
 }
 
 export const sagas = [watchFetchPokemonList];

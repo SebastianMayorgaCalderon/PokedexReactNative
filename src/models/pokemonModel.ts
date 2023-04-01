@@ -1,5 +1,5 @@
 export interface Pokemon {
-  id: number;
+  id: string;
   name: string;
   types: string[];
   height: number;
@@ -8,6 +8,8 @@ export interface Pokemon {
   abilities: PokemonAbility[] | null;
   sprites: PokemonSprites;
   games: string[] | null;
+  imageUrl: string;
+  url: string;
 }
 
 export interface PokemonStat {
@@ -28,12 +30,9 @@ export interface PokemonSprites {
   backShiny: string;
 }
 
-export interface PokemonListItem {
+export interface PokemonListItemOverview {
+  id: string;
   name: string;
   url: string;
-}
-
-export interface PokemonListItemOverview extends PokemonListItem {
-  id: string;
   imageUrl: string;
 }
